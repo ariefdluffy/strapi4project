@@ -713,6 +713,44 @@ export interface ApiCatergoryCatergory extends Schema.CollectionType {
   };
 }
 
+export interface ApiOrderOrder extends Schema.CollectionType {
+  collectionName: 'orders';
+  info: {
+    singularName: 'order';
+    pluralName: 'orders';
+    displayName: 'Orders';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    items: Attribute.JSON;
+    totalPrice: Attribute.Decimal;
+    deliveryAddress: Attribute.Text;
+    courierName: Attribute.String;
+    courierPrice: Attribute.Integer;
+    orderStatus: Attribute.Enumeration<
+      ['waiting-payment', 'packaging', 'on-delivery', 'done', 'cancel']
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Schema.CollectionType {
   collectionName: 'products';
   info: {
@@ -774,6 +812,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::catergory.catergory': ApiCatergoryCatergory;
+      'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
     }
   }
